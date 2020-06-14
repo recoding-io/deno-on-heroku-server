@@ -1,7 +1,7 @@
 // Oaks https://deno.land/x/oak/mod.ts
 // Flags https://deno.land/std/flags/mod.ts
 
-import {Application} from 'https://deno.land/x/oak/mod.ts';
+import {Application, Router} from 'https://deno.land/x/oak/mod.ts';
 
 import * as flags from 'https://deno.land/std/flags/mod.ts';
 
@@ -20,8 +20,18 @@ if (isNaN(port)){
 
 const app = new Application();
 
-app.use((ctx)=> {
-    ctx.response.body = "Hello World";
-});
+const router = new Router();
+
+router.get('/',(ctx) => {
+    ctx.response.body = 'This is main page';
+})
+.get('/home',(ctx)=>{
+    ctx.response.body = "This is home page";
+})
+
+
+app.use(router.routes());
+
+app.use(router.allowedMethods());
 
 await app.listen({port: port});
